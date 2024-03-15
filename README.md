@@ -5,7 +5,7 @@ Our pizza restaurant is working on a new web application designed to run in a Ku
 
 We have been asked to create a deployment that meets the app's specifications. Then, we need to expose the application using a NodePort service. This setup should meet the following criteria:
 
-+ All objects should be in the pizza namespace. This namespace already exists in the cluster.
++ All objects should be in the pizza namespace. 
 + The deployment should be named pizza-deployment.
 + The deployment should have 3 replicas.
 + The deployment's pods should have one container using the aakashgaur57/pizza-service image with the tag 1.12.0.
