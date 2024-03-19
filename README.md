@@ -17,3 +17,57 @@ We have been asked to create a deployment that meets the app's specifications. T
 + The service should be named pizza-service.
 + The service should forward traffic to port 80 on the pods.
 + The service should be exposed externally by listening on port 30080 on each node.
+## Deployement.yaml
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pizza-deployment
+  namespace: pizza
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pizza
+  template:
+    metadata:
+      labels:
+        app: pizza
+    spec:
+      containers:
+      - name: pizza-container
+        image: aakashgaur57/pizza-service:1.12.0
+        command: ["nginx"]
+        args: ["-g", "daemon off;"]
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 10
+```
+## service.yaml
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: pizza-service
+  namespace: pizza
+spec:
+  selector:
+    app: pizza
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30080
+```
